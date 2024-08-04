@@ -230,20 +230,20 @@ if (!input || input.length === 0) {
   return [];
 }
 
-const idList = input.filter(item => item.json.id !== undefined);
-const taskResultList = input.filter(item => item.json.task_id !== undefined);
+const idList = input.filter(item => item.json && item.json.id !== undefined && typeof item.json.id === 'number');
+
+const videoUrls = Array.from(new Set(input
+  .filter(item => item.json && item.json.data && item.json.data.generation && item.json.data.generation.video)
+  .map(item => item.json.data.generation.video.url)
+));
 
 const mergedList = idList.map((item, index) => {
-  if (taskResultList[index] && taskResultList[index].json.task_result) {
-    return {
-      json: {
-        id: item.json.id,
-        image_url: taskResultList[index].json.task_result.image_url
-      }
-    };
-  } else {
-    return { json: { id: item.json.id, image_url: null } };
-  }
+  return {
+    json: {
+      id: item.json.id,
+      video_url: videoUrls[index] || null
+    }
+  };
 });
 
 return mergedList;
