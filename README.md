@@ -183,24 +183,22 @@ if (!input || input.length === 0) {
 }
 
 const idList = input.filter(item => item.json.id !== undefined);
-const taskList = input.filter(item => item.json.data && item.json.data.task_id !== undefined);
+const taskResultList = input.filter(item => item.json.task_id !== undefined);
 
-const minLength = Math.min(idList.length, taskList.length);
+const mergedList = idList.map((item, index) => {
+  if (taskResultList[index] && taskResultList[index].json.task_result) {
+    return {
+      json: {
+        id: item.json.id,
+        image_url: taskResultList[index].json.task_result.image_url
+      }
+    };
+  } else {
+    return { json: { id: item.json.id, image_url: null } };
+  }
+});
 
-const pairedList = [];
-for (let i = 0; i < minLength; i++) {
-  pairedList.push({
-    json: {
-      id: idList[i].json.id,
-      task_id: taskList[i].json.data.task_id,
-      message: taskList[i].json.message,
-      status: taskList[i].json.status || null,
-      success: taskList[i].json.success || null
-    }
-  });
-}
-
-return pairedList;
+return mergedList;
 ```
 
 ### Extrair ID único sem Imagem Aumentada
