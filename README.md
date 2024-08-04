@@ -1,6 +1,6 @@
 # 🎥 YouTube Automático Midjourney + LumaLabs
 
-#### Vídeo:
+#### Vídeo: https://youtu.be/bbruCrAtO7Y
 
 ## Link CREF
 
